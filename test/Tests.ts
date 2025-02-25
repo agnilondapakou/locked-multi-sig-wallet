@@ -44,7 +44,7 @@ describe("Multisig Wallet", function () {
 
   describe("Make a deposite", function() {
     it("Should make a deposite", async () => {
-      const { multisigWallet,  } = await deployMultiSigWallet();
+      const { multisigWallet } = await deployMultiSigWallet();
 
       await multisigWallet.deposit(10000);
 
@@ -56,7 +56,7 @@ describe("Multisig Wallet", function () {
 
   describe("Approuve transaction", function() {
     it("Should approve a transaction", async () => {
-      const { multisigWallet, owner1 } = await deployMultiSigWallet();
+      const { multisigWallet } = await deployMultiSigWallet();
 
       await multisigWallet.deposit(10000);
 
@@ -65,6 +65,36 @@ describe("Multisig Wallet", function () {
       await multisigWallet.approveTransaction(1);
 
       expect((await multisigWallet.transactions(1)).isValidated).to.be.equal(true);
+    })
+  });
+
+  describe("Reject transaction", function() {
+    it("Should reject a transaction", async () => {
+      const { multisigWallet } = await deployMultiSigWallet();
+
+      await multisigWallet.deposit(10000);
+
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      await multisigWallet.rejectTransaction(1);
+
+      expect((await multisigWallet.transactions(1)).isValidated).to.be.equal(false);
+    })
+  });
+
+  describe("Approve", function() {
+    it("Should allow ower to approve", async () => {
+      const { multisigWallet } = await deployMultiSigWallet();
+
+      await multisigWallet.deposit(10000);
+
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      await multisigWallet.approveApproval(1);
+
+      const approvalsCounter = (await multisigWallet.transactions(1)).totalApprove;
+
+      expect(approvalsCounter).to.be.equal(1);
     })
   });
 });
