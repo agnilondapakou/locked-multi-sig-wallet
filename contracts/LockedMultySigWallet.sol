@@ -41,7 +41,7 @@ contract LockedMultySigWallet {
         if(amount <= 0) revert InvalidAmount();
         if(owners[msg.sender] == false) revert UnactivatedOwner();
 
-        Transaction memory transaction = Transaction(msg.sender, block.timestamp + 120, amount, false, 0);
+        Transaction memory transaction = Transaction(msg.sender, block.timestamp + 4, amount, false, 0);
         transactionsCount += 1;
 
         transactions[transactionsCount] = transaction;
